@@ -5,12 +5,15 @@ const shortId = require("shortid");
 exports.signup = (req, res) => {
   const { name, email, password } = req.body;
 
-  const query = User.where({ name: name, email: email });
+  const query = User.where({ email: email });
   query
     .findOne()
     .then((resd) => {
       if (resd) {
-        return res.status(200).json({ response: resd });
+        console.log(resd);
+        return res
+          .status(200)
+          .json({ response: `Email ${resd.email} is taken` });
       }
 
       const { name, email, password } = req.body;
@@ -28,7 +31,7 @@ exports.signup = (req, res) => {
         })
         .catch((err) => {
           return res.status(400).json({
-            error: err,
+            error: "Signup Fail , please try again ",
           });
         });
     })

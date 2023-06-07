@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-
+const crypto = require("crypto");
 const userSchema = Schema(
   {
     username: {
@@ -70,7 +70,6 @@ userSchema
     this.salt = this.makeSalt();
     // encrpyted password
     this.hashed_password = this.encryptPassword(password);
-    console.log(" this.hashed_password :", this.hashed_password);
   })
   .get(function () {
     return this.__password;
@@ -91,7 +90,6 @@ userSchema.methods = {
         .update(password)
         .digest("hex");
     } catch (error) {
-      console.log("errorerror", error);
       return "";
     }
   },

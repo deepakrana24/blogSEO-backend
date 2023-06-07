@@ -21,7 +21,6 @@ exports.signup = (req, res) => {
       newUser
         .save()
         .then((resddd) => {
-          console.log("auth res", resddd);
           res.json({
             message: "Signup success! Please signin.",
             username: username,

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const crypto = require("crypto");
-const userSchema = Schema(
+const userSchema = new Schema(
   {
     username: {
       type: String,
@@ -69,27 +69,26 @@ userSchema
     // creaTE  salt
     this.salt = this.makeSalt();
     // encrpyted password
-    this.hashed_password = this.encryptPassword(password);
+    this.hashed_password = this.encryptPassword(password, this.salt);
   })
   .get(function () {
     return this.__password;
   });
 
 userSchema.methods = {
-  autehenticate: function (plaintext) {
-    return this.encryptPassword(plaintext) == this.hashed_password;
+  authenticate: function (plaintext, hashed_password, salt) {
+    return this.encryptPassword(plaintext, salt) == hashed_password;
   },
-  encryptPassword: function (password) {
+  encryptPassword: function (password, salt) {
     if (!password) {
       console.log("password is not added ");
       return "";
     }
     try {
-      return crypto
-        .createHmac("sha1", this.salt)
-        .update(password)
-        .digest("hex");
+      console.log("slat :", salt);
+      return crypto.createHmac("sha1", salt).update(password).digest("hex");
     } catch (error) {
+      console.log(error);
       return "";
     }
   },
@@ -100,4 +99,4 @@ userSchema.methods = {
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = User;
+module.exports = mongoose.model("User");

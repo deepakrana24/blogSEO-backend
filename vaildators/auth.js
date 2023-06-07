@@ -9,3 +9,10 @@ exports.signupValidation = [
     .isLength({ min: 6 })
     .withMessage("password must be 6 word "),
 ];
+
+exports.signinValidation = [
+  check("email").isEmail().withMessage("Enter vaild Email "),
+  check("password")
+    .isLength({ min: 6 })
+    .withMessage("password must be 6 word "),
+];

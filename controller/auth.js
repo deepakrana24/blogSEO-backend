@@ -2,6 +2,9 @@ const User = require("../models/user");
 
 const shortId = require("shortid");
 const jwt = require("jsonwebtoken");
+const { expressjwt, ExpressJwtRequest } = require("express-jwt");
+// import { expressjwt, ExpressJwtRequest } from "express-jwt";
+
 exports.signup = (req, res) => {
   const { email } = req.body;
 
@@ -70,3 +73,22 @@ exports.signin = (req, res) => {
     });
   });
 };
+
+exports.logout = (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({
+    message: " Signout is success ",
+  });
+};
+
+exports.requireSiginController = (req, res) => {
+  res.status(200).json({
+    message: "you have access to secret page ",
+  });
+};
+
+exports.requireSignin = expressjwt({
+  secret: process.env.JWT_SCRECT_KEY,
+  algorithms: ["HS256"], // added later
+  userProperty: "auth",
+});
